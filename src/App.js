@@ -7,6 +7,8 @@ import ShopPage from './pages/shop/shop.component';
 import SignInAndSignUpPage from './pages/sign-in-and-sign-up/sign-in-and-sign-up.component';
 import Header from './components/header/header.component';
 import { getAuth, onAuthStateChanged  } from "firebase/auth";
+import { onSnapshot } from "firebase/firestore";
+import { createUserProfileDocument } from './firebase/firebase.utils';
 
 const HatsPage = () => (
   <div>
@@ -25,14 +27,34 @@ class App extends React.Component {
 
   unsubsribeFromAuth = null
 
-  componentDidMount() {   
-    const auth = getAuth();
+  componentDidMount() {    // check if user sign in
+    const auth = getAuth();     
     //open subsctiption, always check if the state is changed. Note: it always open as long as our application component is mounted.
-    //Therefore, we need a new method call unsubsribeFromAuth
-    this.unsubsribeFromAuth = onAuthStateChanged(auth, (user) => { 
-        this.setState({ currentUser: user });
-        console.log(user);
-    })
+    //Therefore, we need a new method call unsubscribeFromAuth
+    // Note: The same user cannot sign up again
+    this.unsubsribeFromAuth = onAuthStateChanged(auth, async userAuth => { 
+      if (userAuth) {  //If true, it means user has signed in, then send the userAuth to creatUserProfileDocument()
+        const userRef = await createUserProfileDocument(userAuth); //In createUserProfileDocument(), it return userRef
+
+        onSnapshot(userRef, (snapShot) => {
+          this.setState(
+            {
+              currentUser: {
+                id: snapShot.id,
+                ...snapShot.data()
+              }
+            }
+            ,
+            ()=> {
+              console.log(this.state);
+            }
+          );
+        });
+      }
+
+      //if the userAuth is null (which means user has signed out), the currentUser shold be null also.
+      this.setState({ currentUser: userAuth });
+    });
   }
 
   componentWillUnmount(){
