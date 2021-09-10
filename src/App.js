@@ -1,5 +1,5 @@
 import React from 'react';
-import { Switch, Route } from 'react-router-dom';
+import { Switch, Route, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import './App.css';
@@ -83,13 +83,28 @@ class App extends React.Component {
         <Switch>
           <Route exact path='/' component={Homepage} />
           <Route path='/shop' component={ShopPage}/>
-          <Route path='/signin' component={SignInAndSignUpPage}/>
+          {/* render is the render key that we use in our class components */}
+          <Route
+            exact 
+            path='/signin' 
+            render={() => 
+              this.props.currentUser ? (
+                <Redirect to='/' />
+              ) : (
+                <SignInAndSignUpPage />
+              )
+            } 
+          />
         </Switch>
       </div>
     );
   }
 }
 
+//created this function because when user signed in, the sign-in page shold be hidden.
+const mapStateToProps = ({user}) => ({
+  currentUser: user.currentUser
+})
 
 const mapDispatchToProps = dispatch => ({
   setCurrentUser: user => dispatch(setCurrentUser(user))
@@ -99,4 +114,8 @@ const mapDispatchToProps = dispatch => ({
   //  I'm going to pass to every producer.
 });
 
-export default connect(null, mapDispatchToProps)(App);
+export default connect(
+  mapStateToProps, 
+  mapDispatchToProps
+  )(App);
+//after add "mapStateToProps" to this argument, we can not access this.props.currentUser
