@@ -101,7 +101,7 @@ class App extends React.Component {
   }
 }
 
-//created this function because when user signed in, the sign-in page shold be hidden.
+//created this function because when user signed in, the sign-in page should be hidden.
 const mapStateToProps = ({user}) => ({
   currentUser: user.currentUser
 })
