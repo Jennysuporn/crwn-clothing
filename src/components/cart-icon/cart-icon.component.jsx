@@ -18,6 +18,15 @@ const mapDispatchToProps = dispatch => ({
     toggleCartHidden: () => dispatch(toggleCartHidden())
 });
 
+//equal to
+// var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+//     return {
+//       toggleCartHidden: function toggleCartHidden() {
+//         return dispatch();
+//       }
+//     };
+// };
+
 export default connect(
     null,
     mapDispatchToProps
