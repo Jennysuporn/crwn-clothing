@@ -5,7 +5,6 @@ import { createSelector } from "reselect";
 //this is a function that get whole state, and just returns a slice of it.
 const selectCart = state => state.cart;
 
-const selectUser = state => state.user;
 
 //output 
 // selectCartItems is "property on our cart which is state.cart"
@@ -17,11 +16,27 @@ export const selectCartItems = createSelector( //with createSelector, this is me
     cart => cart.cartItems
 );
 
+export const selectCartHidden = createSelector(
+    [selectCart],
+    cart => cart.hidden
+    
+);
+
 export const selectCartItemCount = createSelector(
     [selectCartItems],
     cartItems =>
         cartItems.reduce(
-            (accumulatedQuantity, cartItem) => accumulatedQuantity+cartItem.quantity,
+            (accumulatedQuantity, cartItem) => accumulatedQuantity + cartItem.quantity,
             0
         )
+);
+
+export const selectCartTotal = createSelector(
+    [selectCartItems],
+    cartItems =>
+    cartItems.reduce(
+        (accumulatedQuantity, cartItem) => 
+            accumulatedQuantity + cartItem.quantity * cartItem.price ,
+        0
+    )
 );
