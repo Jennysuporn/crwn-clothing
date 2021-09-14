@@ -88,7 +88,6 @@ class App extends React.Component {
         <Switch>
           <Route exact path='/' component={Homepage} />
           <Route path='/shop' component={ShopPage}/>
-          <Route path='/shop' component={ShopPage}/>
           <Route exact path='/checkout' component={CheckoutPage}/>
           {/* render is the render key that we use in our class components */}
           <Route

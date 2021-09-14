@@ -3,12 +3,15 @@
 //** Logger is console log for us. This is nice for us to use for debugging redux code */
 
 import { createStore, applyMiddleware } from 'redux';
+import { persistStore } from 'redux-persist';
 import logger from 'redux-logger';
 
 import rootReducer from './root-reducer';
 
 const middlewares = [logger];
 
-const store = createStore(rootReducer, applyMiddleware(...middlewares));
+export const store = createStore(rootReducer, applyMiddleware(...middlewares));
 
-export default store;
+export const persistor = persistStore(store); //Creatinf this new persisted version of our store
+
+export default { store , persistor };
