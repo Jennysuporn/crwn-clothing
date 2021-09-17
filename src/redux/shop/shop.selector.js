@@ -12,7 +12,8 @@ export const selectCollections = createSelector(
 //If we don't create this, we will not be able to use collections.map
 export const selectCollectionsForPreview = createSelector(
     [selectCollections],
-    collections => Object.keys(collections).map(key => collections[key])
+    collections => 
+        collections ? Object.keys(collections).map(key => collections[key]) : []
 );
 
 // FYI : https://www.udemy.com/course/complete-react-developer-zero-to-mastery/learn/lecture/20796198#notes
@@ -20,7 +21,7 @@ export const selectCollectionsForPreview = createSelector(
 export const selectCollection = collectionUrlParam =>
     createSelector(
         [selectCollections],
-        (collections) => collections[collectionUrlParam]
+        collections => (collections ? [collectionUrlParam] : null)
     );
 
 

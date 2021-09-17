@@ -14,10 +14,14 @@ import Header from './components/header/header.component';
 
 import { getAuth, onAuthStateChanged  } from "firebase/auth";
 import { onSnapshot } from "firebase/firestore";
-import { createUserProfileDocument } from './firebase/firebase.utils';
+import { createUserProfileDocument,
+        //  addCollectionAndDocuments  //used for automatically create collection and documents to firestore
+        } 
+         from './firebase/firebase.utils';
 
 import { setCurrentUser } from './redux/user/user.actions';
 import { selectCurrentUser } from './redux/user/user.selectors';
+// import { selectCollectionsForPreview } from './redux/shop/shop.selector';  //used for automatically create collection and documents to firestore
 
 const HatsPage = () => (
   <div>
@@ -40,6 +44,8 @@ class App extends React.Component {
   componentDidMount() {    // check if user sign in
     const auth = getAuth();  
     const { setCurrentUser } = this.props;   
+    const { collectionsArray } = this.props;   //used for automatically create collection and documents to firestore
+   
     //open subsctiption, always check if the state is changed. Note: it always open as long as our application component is mounted.
     //Therefore, we need a new method call unsubscribeFromAuth
     // Note: The same user cannot sign up again
@@ -72,6 +78,7 @@ class App extends React.Component {
       // this.setState({ currentUser: userAuth });
       // Replace this with the below line because we use REDUX 
       setCurrentUser(userAuth);
+      // addCollectionAndDocuments('collections', collectionsArray.map(({title, items}) => ({ title, items}) ));
 
     });
   }
@@ -113,7 +120,8 @@ class App extends React.Component {
 // })
 
 const mapStateToProps = createStructuredSelector({
-  currentUser: selectCurrentUser
+  currentUser: selectCurrentUser,
+  // collectionsArray: selectCollectionsForPreview  //used for automatically create collection and documents to firestore
 });
 
 const mapDispatchToProps = dispatch => ({
